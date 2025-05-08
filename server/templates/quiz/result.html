@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Результат теста</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <p><strong>Тест:</strong> {{ result.quiz.title }}</p>
+            <p><strong>Правильных ответов:</strong> {{ result.score }} из {{ result.total }}</p>
+            <p><strong>Процент:</strong> {{ result.percent }}%</p>
+        </div>
+    </div>
+
+    <a href="{{ url_for('quiz.index') }}" class="btn btn-primary mt-3">На главную</a>
+</div>
+{% endblock %}

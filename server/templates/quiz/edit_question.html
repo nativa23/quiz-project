@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Редактирование вопроса</h2>
+
+    <form method="POST" action="{{ url_for('quiz.edit_question', question_id=question.id) }}">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            <label for="text" class="form-label">Вопрос</label>
+            <input type="text" class="form-control" id="text" name="text" value="{{ form.text.data }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="option_a" class="form-label">Вариант A</label>
+            <input type="text" class="form-control" id="option_a" name="option_a" value="{{ form.option_a.data }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="option_b" class="form-label">Вариант B</label>
+            <input type="text" class="form-control" id="option_b" name="option_b" value="{{ form.option_b.data }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="option_c" class="form-label">Вариант C</label>
+            <input type="text" class="form-control" id="option_c" name="option_c" value="{{ form.option_c.data }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="option_d" class="form-label">Вариант D</label>
+            <input type="text" class="form-control" id="option_d" name="option_d" value="{{ form.option_d.data }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="correct_answer" class="form-label">Правильный ответ</label>
+            <select class="form-select" id="correct_answer" name="correct_answer">
+                <option value="A" {% if form.correct_answer.data == 'A' %}selected{% endif %}>A</option>
+                <option value="B" {% if form.correct_answer.data == 'B' %}selected{% endif %}>B</option>
+                <option value="C" {% if form.correct_answer.data == 'C' %}selected{% endif %}>C</option>
+                <option value="D" {% if form.correct_answer.data == 'D' %}selected{% endif %}>D</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+</div>
+{% endblock %}

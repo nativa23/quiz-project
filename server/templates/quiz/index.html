@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Выберите квиз</h2>
+
+    <div class="mb-3 d-flex justify-content-between align-items-center">
+        <input type="text" id="quiz-search" class="form-control w-75" placeholder="Поиск по названию..." onkeyup="searchQuiz()">
+        <button class="btn btn-primary ms-3" onclick="searchQuiz()">Найти</button>
+
+        <div class="dropdown ms-3">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="sortButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Сортировка
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="sortButton">
+                <li><a class="dropdown-item" href="#" onclick="sortQuizzes('title')">По алфавиту</a></li>
+                <li><a class="dropdown-item" href="#" onclick="sortQuizzes('created_at')">По дате создания</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for quiz in quizzes %}
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ quiz.title }}</h5>
+                    <div class="card-text d-flex flex-column flex-grow-1">
+                        <div class="mt-auto">
+                            <div>Количество вопросов: {{ quiz.questions | length }}</div>
+                            <div>Дата создания: {{ quiz.created_at.strftime('%d.%m.%Y') }}</div>
+                        </div>
+                        <div class="mt-3 d-flex justify-content-between align-items-center">
+                            <a href="{{ url_for('quiz.take_quiz', quiz_id=quiz.id) }}" class="btn btn-primary">Пройти тест</a>
+
+                            {% if current_user.is_authenticated and current_user.is_admin %}
+                            <form method="POST" action="{{ url_for('quiz.delete_quiz', quiz_id=quiz.id) }}" onsubmit="return confirm('Удалить квиз &laquo;{{ quiz.title }}&raquo;?');">
+                                <button type="submit" class="btn btn-outline-danger btn-sm ms-2" title="Удалить квиз">🗑</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    let currentSort = {
+        field: null,
+        direction: 'asc'
+    };
+
+    function searchQuiz() {
+        let searchValue = document.getElementById('quiz-search').value.toLowerCase();
+        let quizzes = document.querySelectorAll('.card');
+        quizzes.forEach(function(quiz) {
+            let title = quiz.querySelector('.card-title').innerText.toLowerCase();
+            quiz.style.display = title.includes(searchValue) ? 'block' : 'none';
+        });
+    }
+
+    function sortQuizzes(field) {
+        let quizzesContainer = document.querySelector('.row');
+        let quizzes = Array.from(quizzesContainer.children);
+
+        if (currentSort.field === field) {
+            currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentSort.field = field;
+            currentSort.direction = 'asc';
+        }
+
+        quizzes.sort(function(a, b) {
+            let valueA = a.querySelector('.card-title').innerText.toLowerCase();
+            let valueB = b.querySelector('.card-title').innerText.toLowerCase();
+
+            if (field === 'created_at') {
+                valueA = a.querySelector('.card-text div:nth-child(2)').innerText;
+                valueB = b.querySelector('.card-text div:nth-child(2)').innerText;
+            }
+
+            return currentSort.direction === 'asc'
+                ? valueA.localeCompare(valueB)
+                : valueB.localeCompare(valueA);
+        });
+
+        quizzesContainer.innerHTML = '';
+        quizzes.forEach(function(quiz) {
+            quizzesContainer.appendChild(quiz);
+        });
+    }
+</script>
+{% endblock %}
