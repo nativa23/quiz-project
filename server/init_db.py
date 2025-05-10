@@ -1,10 +1,12 @@
 from werkzeug.security import generate_password_hash
+
 from models import db
 from models.user import User
 from server.main import create_app
 
 # Создание приложения и контекста
 app = create_app()
+
 
 def create_admin():
     email = input("Введите email администратора: ")
@@ -21,6 +23,7 @@ def create_admin():
     db.session.add(admin)
     db.session.commit()
     print("Администратор создан успешно!")
+
 
 if __name__ == "__main__":
     with app.app_context():

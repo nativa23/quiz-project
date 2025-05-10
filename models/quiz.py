@@ -2,7 +2,6 @@ from datetime import datetime
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
-from sqlalchemy.orm import relationship
 from wtforms.fields.simple import SubmitField
 
 from . import db
@@ -69,5 +68,4 @@ class UploadQuizForm(FlaskForm):
         FileAllowed(['xlsx', 'xls'], 'Только файлы Excel разрешены')
     ])
 
-    # Кнопка для отправки формы
     submit = SubmitField('Загрузить файл')

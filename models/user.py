@@ -1,6 +1,7 @@
-from . import db
 from flask_login import UserMixin
-from sqlalchemy.orm import relationship
+
+from . import db
+
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
