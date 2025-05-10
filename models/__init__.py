@@ -6,4 +6,3 @@ db = SQLAlchemy()
 from models import user, quiz
 from models.user import User
 from models.quiz import Quiz, Question, Answer, QuizResult
-

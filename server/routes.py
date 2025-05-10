@@ -1,24 +1,22 @@
 import logging
-import os
-import pandas as pd
+from datetime import datetime
 
-from flask import Blueprint, render_template, redirect, url_for, request, flash, current_app
+import pandas as pd
+from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user
 from sqlalchemy.orm import joinedload
 from werkzeug.utils import secure_filename
 
-from models.quiz import Quiz, Question, Answer, QuizResult, UploadQuizForm
 from models import db, User
+from models.quiz import Quiz, Question, Answer, QuizResult, UploadQuizForm
 from server.forms import QuizForm, QuestionForm
-from datetime import datetime
 
 quiz_bp = Blueprint('quiz', __name__)
 
-# Устанавливаем уровень логирования
 logging.basicConfig(level=logging.DEBUG)
 
-# Конфигурация для загрузки файлов
 ALLOWED_EXTENSIONS = {'xlsx', 'xls'}
+
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -56,12 +54,10 @@ def add_quiz():
 
     form = QuizForm()
 
-    # Если нажата кнопка "Добавить вопрос" — просто добавляем поле и перерисовываем форму
     if request.method == 'POST' and 'add_question' in request.form:
         form.questions.append_entry()
         return render_template('quiz/add_quiz.html', form=form)
 
-    # Обработка финального сабмита формы
     if form.validate_on_submit():
         quiz = Quiz(title=form.title.data)
         db.session.add(quiz)
@@ -91,7 +87,6 @@ def add_quiz():
         flash('Квиз успешно сохранён!', 'success')
         return redirect(url_for('quiz.view_questions'))
 
-    # Первичная загрузка формы или ошибка валидации
     if request.method == 'GET' and len(form.questions) == 0:
         form.questions.append_entry()
 
@@ -117,7 +112,8 @@ def upload_quiz():
 
         required_columns = ['question', 'answer_a', 'answer_b', 'answer_c', 'answer_d', 'is_correct']
         if not all(col in df.columns for col in required_columns):
-            flash('Файл должен содержать все столбцы: question, answer_a, answer_b, answer_c, answer_d, is_correct', 'danger')
+            flash('Файл должен содержать все столбцы: question, answer_a, answer_b, answer_c, answer_d, is_correct',
+                  'danger')
             return render_template('quiz/upload_quiz.html', form=form)
 
         quiz_title = request.form.get('quiz_name', '').strip()
@@ -168,7 +164,6 @@ def upload_quiz():
         flash('Квиз успешно загружен и сохранён в базе.', 'success')
 
     return render_template('quiz/upload_quiz.html', form=form, quiz_data=quiz_data)
-
 
 
 # Редактирование вопроса
@@ -224,7 +219,7 @@ def edit_question(question_id):
     return render_template('quiz/edit_question.html', form=form, question=question)
 
 
-# Страница с прохождением теста
+# Страница с прохождением квиза
 @quiz_bp.route('/quiz/<int:quiz_id>', methods=['GET', 'POST'])
 @login_required
 def take_quiz(quiz_id):
@@ -279,6 +274,7 @@ def view_questions():
     return render_template('quiz/view_questions.html', questions=questions, search_query=search_query)
 
 
+# История прохождений квизов (только для администратора)
 @quiz_bp.route('/history')
 @login_required
 def quiz_history():
@@ -293,6 +289,8 @@ def quiz_history():
 
     return render_template('quiz/history.html', results=results)
 
+
+# Просмотр всех пользователей (только для администратора)
 @quiz_bp.route('/users')
 @login_required
 def view_users():
@@ -300,10 +298,11 @@ def view_users():
         flash("Доступ только для администраторов", "warning")
         return redirect(url_for('quiz.index'))
 
-    users = User.query.all()  # Извлекаем всех пользователей
+    users = User.query.all()
     return render_template('quiz/view_users.html', users=users)
 
 
+# Удаление квиза (только для администратора)
 @quiz_bp.route('/quiz/delete/<int:quiz_id>', methods=['POST'])
 @login_required
 def delete_quiz(quiz_id):
@@ -317,6 +316,8 @@ def delete_quiz(quiz_id):
     flash(f'Квиз «{quiz.title}» удалён.', 'success')
     return redirect(url_for('quiz.index'))
 
+
+# Удаление вопроса (только для администратора)
 @quiz_bp.route('/question/delete/<int:question_id>', methods=['POST', 'GET'])
 @login_required
 def delete_question(question_id):

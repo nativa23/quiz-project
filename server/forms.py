@@ -31,15 +31,16 @@ class QuestionForm(FlaskForm):
     ], validators=[DataRequired()])
 
 
-
 class QuizForm(FlaskForm):
     title = StringField('Название квиза', validators=[DataRequired()], name="quiz-title")
     questions = FieldList(FormField(QuestionForm), min_entries=1, max_entries=20)
     submit = SubmitField('Создать квиз')
 
+
 class AnswerForm(FlaskForm):
     text = StringField('Ответ', validators=[DataRequired()])
     is_correct = SelectField('Правильный ответ', choices=[('yes', 'Да'), ('no', 'Нет')])
+
 
 class QuestionForm(FlaskForm):
     text = StringField('Текст вопроса', validators=[DataRequired()])
