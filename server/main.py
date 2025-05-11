@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_login import LoginManager
-from flask_migrate import Migrate  # Импортируем Flask-Migrate
+from flask_migrate import Migrate
 
 from models import db
 from server.auth import auth_bp
