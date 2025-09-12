@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% import 'macros/question_form.html' as macros %}
+
+{% block title %}Добавить тест{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Добавить тест</h2>
+
+    <!-- Ошибки формы -->
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% endfor %}
+    {% endfor %}
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ form.title.label(class="form-label") }}
+            {{ form.title(class="form-control") }}
+        </div>
+
+        <h4>Вопросы</h4>
+        <div id="questions">
+            {% for question_form in form.questions %}
+                <div class="question-block mb-4 border rounded p-3">
+                    <h5>Вопрос №{{ loop.index }}</h5>
+                    {{ macros.render_question(question_form, loop.index0) }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <button type="submit" name="add_question" class="btn btn-secondary mt-3">Добавить вопрос</button>
+        <button type="submit" class="btn btn-primary mt-3">Сохранить квиз</button>
+    </form>
+</div>
+{% endblock %}

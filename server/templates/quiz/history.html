@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>История прохождения квизов</h2>
+
+    {% if results %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Пользователь</th>
+                    <th>Тест</th>
+                    <th>Дата</th>
+                    <th>Результат</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in results %}
+                <tr>
+                    <td>{{ r.user.email }}</td>
+                    <td>{{ r.quiz.title }}</td>
+                    <td>{{ r.timestamp.strftime('%d.%m.%Y %H:%M') }}</td>
+                    <td>{{ r.score }}/{{ r.total }} ({{ r.percent }}%)</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Вы ещё не прошли ни одного квиза</p>
+    {% endif %}
+</div>
+{% endblock %}

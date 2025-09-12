@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Загрузить квиз</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            <label for="quiz_file" class="form-label">Выберите файл Excel с квизом</label>
+            <input type="file" name="quiz_file" id="quiz_file" class="form-control" required>
+            <small class="form-text text-muted">Формат файла (столбцы): question, answer_a, answer_b, answer_c, answer_d, is_correct</small>
+        </div>
+
+        <div class="mb-3">
+            <label for="quiz_name" class="form-label">Название квиза</label>
+            <input type="text" name="quiz_name" id="quiz_name" class="form-control" placeholder="Введите название квиза" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Загрузить</button>
+    </form>
+
+    {% if quiz_data %}
+        <h3 class="mt-4">Предварительный просмотр загруженного квиза:</h3>
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>Вопрос</th>
+                    <th>Ответ A</th>
+                    <th>Ответ B</th>
+                    <th>Ответ C</th>
+                    <th>Ответ D</th>
+                    <th>Правильный ответ</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in quiz_data %}
+                <tr>
+                    <td>{{ item['question'] }}</td>
+                    <td>{{ item['answer_a'] }}</td>
+                    <td>{{ item['answer_b'] }}</td>
+                    <td>{{ item['answer_c'] }}</td>
+                    <td>{{ item['answer_d'] }}</td>
+                    <td>{{ item['is_correct'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+    {% endif %}
+</div>
+{% endblock %}

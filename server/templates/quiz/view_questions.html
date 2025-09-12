@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Все вопросы</h2>
+
+    <!-- Поиск по названию -->
+    <form method="GET" class="mb-4">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Поиск по названию квиза" name="search" value="{{ search_query }}">
+            <button class="btn btn-primary" type="submit">Найти</button>
+        </div>
+    </form>
+
+    {% if questions %}
+    <table class="table table-striped table-hover table-bordered align-middle">
+        <thead class="table-light">
+    <tr>
+        <th class="text-center">Квиз</th>
+        <th class="text-center">Вопрос</th>
+        <th class="text-center">Вариант A</th>
+        <th class="text-center">Вариант B</th>
+        <th class="text-center">Вариант C</th>
+        <th class="text-center">Вариант D</th>
+        <th class="text-center">Правильный ответ</th>
+        <th class="text-center">Действия</th>
+    </tr>
+</thead>
+
+        <tbody>
+            {% for question in questions %}
+            <tr>
+                <td>{{ question.quiz.title }}</td>
+                <td>{{ question.text }}</td>
+                <td>{{ question.answers[0].text if question.answers|length > 0 else '' }}</td>
+                <td>{{ question.answers[1].text if question.answers|length > 1 else '' }}</td>
+                <td>{{ question.answers[2].text if question.answers|length > 2 else '' }}</td>
+                <td>{{ question.answers[3].text if question.answers|length > 3 else '' }}</td>
+                <td class="text-center">
+                    {% set labels = ['A', 'B', 'C', 'D'] %}
+                    {% for answer in question.answers %}
+                        {% if answer.is_correct %}
+                            {{ labels[loop.index0] }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td class="text-center">
+                    <a href="{{ url_for('quiz.edit_question', question_id=question.id) }}"
+                       class="btn btn-outline-primary btn-sm me-1" title="Редактировать">
+                        <i class="bi bi-pencil-fill"></i>
+                    </a>
+                    <a href="{{ url_for('quiz.delete_question', question_id=question.id) }}"
+                       class="btn btn-outline-danger btn-sm" title="Удалить"
+                       onclick="return confirm('Удалить вопрос?');">
+                        <i class="bi bi-trash-fill"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>Вопросы не найдены.</p>
+    {% endif %}
+
+    <a href="{{ url_for('quiz.index') }}" class="btn btn-secondary">Назад</a>
+</div>
+{% endblock %}

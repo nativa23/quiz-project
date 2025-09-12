@@ -1,6 +1,7 @@
 # 🧠 Quiz Project
 
-A web application built with Flask for creating, taking, and managing quizzes. It supports user registration, quiz uploads from Excel files, and displaying results.
+A web application built with Flask for creating, taking, and managing quizzes. It supports user registration, quiz
+uploads from Excel files, and displaying results.
 
 ## 📌 Key Features
 
@@ -28,21 +29,29 @@ python -m venv venv
 source venv/bin/activate  # Linux/macOS
 venv\Scripts\activate     # Windows
 ```
+
 ### 3. Install dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
+
 ### 4. Initialize the database
+
 ```bash
 python server/init_db.py
 ```
+
 ### 5. Run the application
+
 ```bash
 python server/main.py
 ```
+
 The app will be available at: http://localhost:5000
 
 ## 🗃️ Project Structure
+
 ```
 quiz_project/
 ├── README.md # Project description
@@ -81,9 +90,11 @@ quiz_project/
 │ └── macros/
 │ └── question_form.html
 ```
+
 ## 🧪 Sample Quizzes
 
-You can try out the quiz upload feature using sample files provided in the [`sample_quizzes/`](./sample_quizzes) directory.
+You can try out the quiz upload feature using sample files provided in the [`sample_quizzes/`](./sample_quizzes)
+directory.
 
 Each file is a ready-to-use Excel quiz. To test:
 
@@ -101,14 +112,16 @@ Each file is a ready-to-use Excel quiz. To test:
 - [Flask](https://flask.palletsprojects.com/) — lightweight web framework
 - [Flask-WTF](https://flask-wtf.readthedocs.io/) — form handling and validation
 - [Flask-Login](https://flask-login.readthedocs.io/) — user session management
-- [Flask-Migrate](https://flask-migrate.readthedocs.io/) + [Alembic](https://alembic.sqlalchemy.org/) — database migrations
+- [Flask-Migrate](https://flask-migrate.readthedocs.io/) + [Alembic](https://alembic.sqlalchemy.org/) — database
+  migrations
 - [SQLAlchemy](https://www.sqlalchemy.org/) — ORM for database interaction
 - [SQLite](https://www.sqlite.org/index.html) — lightweight embedded database
 - [Pandas](https://pandas.pydata.org/) — Excel file parsing and data handling
-- [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) + [Jinja2](https://jinja.palletsprojects.com/) — template engine for dynamic HTML rendering
+- [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) + [Jinja2](https://jinja.palletsprojects.com/) — template
+  engine for dynamic HTML rendering
 - [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS) — styling for the user interface
-
 
 ## 📄 License
 
-This project is completely open and unrestricted. No license applies — you are free to use, modify, and distribute it without limitations.
+This project is completely open and unrestricted. No license applies — you are free to use, modify, and distribute it
+without limitations.

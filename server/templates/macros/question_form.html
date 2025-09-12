@@ -1,0 +1,26 @@
+{% macro render_question(form, index) %}
+    <div class="mb-3">
+        {{ form.text.label(class="form-label") }}
+        {{ form.text(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.option_a.label(class="form-label") }}
+        {{ form.option_a(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.option_b.label(class="form-label") }}
+        {{ form.option_b(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.option_c.label(class="form-label") }}
+        {{ form.option_c(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.option_d.label(class="form-label") }}
+        {{ form.option_d(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.correct_answer.label(class="form-label") }}
+        {{ form.correct_answer(class="form-select") }}
+    </div>
+{% endmacro %}
